@@ -23,16 +23,16 @@ fn add_first_and_last_digit_of_line(s: &str) -> u32 {
     concat_two_digit_chars(first.unwrap(), last.unwrap())
 }
 
-const arr: [&str; 10] = [
+const ENGLISH_NUMBERS: [&str; 10] = [
     "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine",
 ];
 
 fn get_english_number(s: &str) -> Option<u32> {
-    arr.iter()
+    ENGLISH_NUMBERS
+        .iter()
         .enumerate()
-        .filter(|(i, x)| s.contains(*x))
-        .last()
-        .and_then(|(i, x)| Some(i.try_into().unwrap()))
+        .find(|(_, x)| s.contains(*x))
+        .and_then(|(i, _)| Some(i.try_into().unwrap()))
 }
 
 fn get_first_and_last_digit_with_english_words(s: &str) -> u32 {
@@ -70,6 +70,7 @@ fn main() {
     let puzzle = get_puzzle();
     let result_1 = add_first_and_last_digit_of_text_lines(&puzzle, Puzzle::First);
     let result_2 = add_first_and_last_digit_of_text_lines(&puzzle, Puzzle::Second);
+    println!("{result_2}");
 }
 
 #[cfg(test)]
