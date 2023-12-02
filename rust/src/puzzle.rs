@@ -1,4 +1,4 @@
-pub enum Puzzle {
-    First,
-    Second,
+pub enum AocPuzzle {
+    PartOne,
+    PartTwo,
 }

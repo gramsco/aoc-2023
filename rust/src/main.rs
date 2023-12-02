@@ -1,29 +1,28 @@
 use std::env;
 
-use puzzle::Puzzle;
+use puzzle::AocPuzzle;
 mod day1;
 mod day2;
 
 mod puzzle;
 
-fn run_day(day: &str, puzzle: puzzle::Puzzle) -> u32 {
+fn run_day(day: &str, puzzle: puzzle::AocPuzzle) -> u32 {
     match day {
         "day1" => day1::day_1(puzzle),
-        "day2" => day2::day_2(),
-        _ => panic!("Sorry"),
+        "day2" => day2::day_2(puzzle),
+        _ => panic!("Day not implemented yet."),
     }
 }
 
 fn main() {
     let args: Vec<String> = env::args().collect();
     let day = &args[1];
-    let x = &args[2];
-    let puzzle = match x.as_str() {
-        "part1" => Puzzle::First,
-        "part2" => Puzzle::Second,
+    let aoc_puzzle = match args[2].as_str() {
+        "part1" => AocPuzzle::PartOne,
+        "part2" => AocPuzzle::PartTwo,
         _ => panic!(""),
     };
 
-    let res = run_day(day, puzzle);
+    let res = run_day(day, aoc_puzzle);
     println!("{res}");
 }

@@ -1,6 +1,6 @@
 use std::fs;
 
-use crate::puzzle::Puzzle;
+use crate::puzzle::AocPuzzle;
 
 fn get_puzzle() -> String {
     fs::read_to_string("puzzle_1_1").expect("Should have been able to read the file")
@@ -53,16 +53,16 @@ fn get_first_and_last_digit_with_english_words(s: &str) -> u32 {
     first * 10 + last
 }
 
-fn add_first_and_last_digit_of_text_lines(s: &str, puzzle: Puzzle) -> u32 {
+fn add_first_and_last_digit_of_text_lines(s: &str, puzzle: AocPuzzle) -> u32 {
     s.lines().fold(0, |a, b| {
         a + match puzzle {
-            Puzzle::First => add_first_and_last_digit_of_line(b),
-            Puzzle::Second => get_first_and_last_digit_with_english_words(b),
+            AocPuzzle::PartOne => add_first_and_last_digit_of_line(b),
+            AocPuzzle::PartTwo => get_first_and_last_digit_with_english_words(b),
         }
     })
 }
 
-pub fn day_1(puzzle: Puzzle) -> u32 {
+pub fn day_1(puzzle: AocPuzzle) -> u32 {
     let puzzle_file = get_puzzle();
     let result = add_first_and_last_digit_of_text_lines(&puzzle_file, puzzle);
     return result;
@@ -70,7 +70,7 @@ pub fn day_1(puzzle: Puzzle) -> u32 {
 
 #[cfg(test)]
 mod tests {
-    use crate::{day1::add_first_and_last_digit_of_text_lines, Puzzle};
+    use crate::{day1::add_first_and_last_digit_of_text_lines, AocPuzzle};
 
     #[test]
     fn test_puzzle1() {
@@ -80,7 +80,7 @@ mod tests {
 pqr3stu8vwx
 a1b2c3d4e5f
 treb7uchet",
-                crate::Puzzle::First
+                crate::AocPuzzle::PartOne
             ),
             142
         )
@@ -97,7 +97,7 @@ xtwone3four
 4nineeightseven2
 zoneight234
 7pqrstsixteen",
-                Puzzle::Second
+                AocPuzzle::PartTwo
             ),
             281
         )
