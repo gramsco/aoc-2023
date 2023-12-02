@@ -2,13 +2,14 @@ use std::env;
 
 use puzzle::Puzzle;
 mod day1;
+mod day2;
 
 mod puzzle;
 
 fn run_day(day: &str, puzzle: puzzle::Puzzle) -> u32 {
     match day {
         "day1" => day1::day_1(puzzle),
-        "day2" => unimplemented!(),
+        "day2" => day2::day_2(),
         _ => panic!("Sorry"),
     }
 }
