@@ -12,7 +12,7 @@ pub fn day_3(puzzle: AocPuzzle) -> u32 {
     let puzzle_file = get_puzzle();
     match puzzle {
         AocPuzzle::PartOne => part_1(&puzzle_file),
-        AocPuzzle::PartTwo => unimplemented!(),
+        AocPuzzle::PartTwo => part_2(&puzzle_file),
     }
 }
 
@@ -93,6 +93,38 @@ fn tokenize_lines(line: &str) -> Vec<Token> {
     tokens
 }
 
+fn part_2(input: &str) -> u32 {
+    let tokens = tokenize_lines(input);
+    let gears_positions: &Vec<_> = &tokens
+        .iter()
+        .filter_map(|x| match x {
+            Token::Symbol('*', coordinates) => Some(coordinates),
+            _ => None,
+        })
+        .collect();
+
+    gears_positions.iter().fold(0, |acc, s| {
+        let compatibles: Vec<_> = tokens
+            .iter()
+            .filter_map(|x| match x {
+                Token::Number(n) => {
+                    if n.coordinates_compatible(**s) {
+                        Some(n.value)
+                    } else {
+                        None
+                    }
+                }
+                _ => None,
+            })
+            .collect();
+
+        acc + match compatibles.len() {
+            2 => compatibles[0] * compatibles[1],
+            _ => 0,
+        }
+    })
+}
+
 fn part_1(input: &str) -> u32 {
     let tokens = tokenize_lines(input);
     let symbols_positions: &Vec<_> = &tokens
@@ -122,7 +154,7 @@ fn part_1(input: &str) -> u32 {
 
 #[cfg(test)]
 mod tests {
-    use crate::day3::{part_1, tokenize_lines, Num, Token};
+    use crate::day3::{part_1, part_2, tokenize_lines, Num, Token};
 
     #[test]
     fn test_part_1() {
@@ -140,6 +172,25 @@ mod tests {
 .664.598.."
             ),
             4361
+        )
+    }
+
+    #[test]
+    fn test_part_2() {
+        assert_eq!(
+            part_2(
+                "467..114..
+...*......
+..35..633.
+......#...
+617*......
+.....+.58.
+..592.....
+......755.
+...$.*....
+.664.598.."
+            ),
+            467_835
         )
     }
 
