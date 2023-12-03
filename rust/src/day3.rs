@@ -2,7 +2,6 @@ use std::fs;
 
 use crate::puzzle::AocPuzzle;
 
-//TODO: remove Periods as... we don't care.
 //TODO: reduce complexity
 
 #[derive(PartialEq, Debug)]
@@ -52,7 +51,6 @@ impl Num {
 enum Token {
     Number(Num),
     Symbol(char, (usize, usize)),
-    Period,
 }
 
 fn tokenize_lines(line: &str) -> Vec<Token> {
@@ -88,7 +86,7 @@ fn tokenize_lines(line: &str) -> Vec<Token> {
             }
 
             match c {
-                '.' => tokens.push(Token::Period),
+                '.' => continue,
                 symbol => tokens.push(Token::Symbol(symbol, (line_index, column))),
             }
         }
@@ -242,14 +240,11 @@ mod tests {
     fn test_parse_line() {
         assert_eq!(
             tokenize_lines(".867"),
-            vec![
-                Token::Period,
-                Token::Number(Num {
-                    value: 867,
-                    coordinates: (0, 1),
-                    length: 3
-                }),
-            ]
+            vec![Token::Number(Num {
+                value: 867,
+                coordinates: (0, 1),
+                length: 3
+            }),]
         );
         assert_eq!(
             tokenize_lines(
@@ -265,157 +260,72 @@ mod tests {
 .664.598..",
             ),
             vec![
-                // BEGIN LINE 1
+                // Line 1
                 Token::Number(Num {
                     value: 467,
                     length: 3,
                     coordinates: (0, 0)
                 }),
-                Token::Period,
-                Token::Period,
                 Token::Number(Num {
                     value: 114,
                     length: 3,
                     coordinates: (0, 5)
                 }),
-                Token::Period,
-                Token::Period,
-                // END LINE 1
-
-                // BEGIN LINE 2
-                Token::Period,
-                Token::Period,
-                Token::Period,
+                // Line 2
                 Token::Symbol('*', (1, 3)),
-                Token::Period,
-                Token::Period,
-                Token::Period,
-                Token::Period,
-                Token::Period,
-                Token::Period,
-                // END LINE 2
-
-                // BEGIN LINE 3
-                Token::Period,
-                Token::Period,
+                // Line 3
                 Token::Number(Num {
                     value: 35,
                     length: 2,
                     coordinates: (2, 2)
                 }),
-                Token::Period,
-                Token::Period,
                 Token::Number(Num {
                     value: 633,
                     length: 3,
                     coordinates: (2, 6)
                 }),
-                Token::Period,
-                // END LINE 3
-
-                // BEGIN LINE 4
-                Token::Period,
-                Token::Period,
-                Token::Period,
-                Token::Period,
-                Token::Period,
-                Token::Period,
+                // Line 4
                 Token::Symbol('#', (3, 6)),
-                Token::Period,
-                Token::Period,
-                Token::Period,
-                // END LINE 4
-
-                // BEGIN LINE 5
+                // Line 5
                 Token::Number(Num {
                     value: 617,
                     length: 3,
                     coordinates: (4, 0)
                 }),
                 Token::Symbol('*', (4, 3)),
-                Token::Period,
-                Token::Period,
-                Token::Period,
-                Token::Period,
-                Token::Period,
-                Token::Period,
-                // END LINE 5
-
-                // BEGIN Line 6
-                Token::Period,
-                Token::Period,
-                Token::Period,
-                Token::Period,
-                Token::Period,
+                // Line 6
                 Token::Symbol('+', (5, 5)),
-                Token::Period,
                 Token::Number(Num {
                     value: 58,
                     coordinates: (5, 7),
                     length: 2
                 }),
-                Token::Period,
-                // END Line 6
-
-                // // BEGIN LINE 7
-                Token::Period,
-                Token::Period,
+                // Line 7
                 Token::Number(Num {
                     value: 592,
                     length: 3,
                     coordinates: (6, 2)
                 }),
-                Token::Period,
-                Token::Period,
-                Token::Period,
-                Token::Period,
-                Token::Period,
-                // END LINE 7
-
-                // BEGIN LINE 8
-                Token::Period,
-                Token::Period,
-                Token::Period,
-                Token::Period,
-                Token::Period,
-                Token::Period,
+                // Line 8
                 Token::Number(Num {
                     value: 755,
                     length: 3,
                     coordinates: (7, 6)
                 }),
-                Token::Period,
-                // END LINE 8
-
-                // BEGIN LINE 9
-                Token::Period,
-                Token::Period,
-                Token::Period,
+                // Line 9
                 Token::Symbol('$', (8, 3)),
-                Token::Period,
                 Token::Symbol('*', (8, 5)),
-                Token::Period,
-                Token::Period,
-                Token::Period,
-                Token::Period,
-                // END LINE 9
-
-                // BEGIN LINE 10
-                Token::Period,
+                // Line 10
                 Token::Number(Num {
                     value: 664,
                     length: 3,
                     coordinates: (9, 1)
                 }),
-                Token::Period,
                 Token::Number(Num {
                     value: 598,
                     length: 3,
                     coordinates: (9, 5)
                 }),
-                Token::Period,
-                Token::Period,
-                // END LINE 10
             ]
         )
     }
