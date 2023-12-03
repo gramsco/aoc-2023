@@ -3,6 +3,7 @@ use std::env;
 use puzzle::AocPuzzle;
 mod day1;
 mod day2;
+mod day3;
 
 mod puzzle;
 
@@ -10,6 +11,7 @@ fn run_day(day: &str, puzzle: puzzle::AocPuzzle) -> u32 {
     match day {
         "day1" => day1::day_1(puzzle),
         "day2" => day2::day_2(puzzle),
+        "day3" => day3::day_3(puzzle),
         _ => panic!("Day not implemented yet."),
     }
 }
