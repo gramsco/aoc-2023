@@ -2,6 +2,9 @@ use std::fs;
 
 use crate::puzzle::AocPuzzle;
 
+//TODO: remove Periods as... we don't care.
+//TODO: reduce complexity
+
 #[derive(PartialEq, Debug)]
 struct Num {
     value: u32,
