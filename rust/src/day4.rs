@@ -1,4 +1,4 @@
-use std::{collections::HashMap, fs};
+use std::fs;
 
 use crate::puzzle::AocPuzzle;
 
@@ -64,39 +64,41 @@ fn get_puzzle() -> String {
 }
 
 struct CardsRegistry {
-    cards_indexes: HashMap<u8, u32>,
+    cards_indexes: Vec<u32>,
 }
 
 impl CardsRegistry {
-    fn add_index(&mut self, index: u8) {
-        self.cards_indexes
-            .entry(index)
-            .and_modify(|v| *v += 1)
-            .or_insert(1);
-    }
-    fn new() -> CardsRegistry {
-        CardsRegistry {
-            cards_indexes: HashMap::new(),
+    fn add_index(&mut self, index: usize) {
+        if let Some(x) = self.cards_indexes.get_mut(index) {
+            *x += 1
+        } else {
+            self.cards_indexes[index] = 1
         }
     }
-    fn get_index(&self, index: u8) -> u32 {
-        *self.cards_indexes.get(&index).unwrap_or(&0)
+    fn new(len: usize) -> CardsRegistry {
+        CardsRegistry {
+            cards_indexes: vec![0; len],
+        }
+    }
+    fn get_index(&self, index: usize) -> u32 {
+        *self.cards_indexes.get(index).unwrap_or(&0)
     }
 
     fn get_count(&self) -> u32 {
-        self.cards_indexes.values().sum::<u32>()
+        self.cards_indexes.iter().sum::<u32>()
     }
 }
 
 fn part_2(input: &str) -> u32 {
-    let mut registry = CardsRegistry::new();
+    let mut registry = CardsRegistry::new(input.len());
     for line in input.lines() {
         let card = Card::from_raw_line(line);
-        let num_of_copies = registry.get_index(card.id);
+        let num_of_copies = registry.get_index(card.id as usize);
         let winning = card.get_winning_tickets().iter().count() as u8;
+
         for _ in 0..=num_of_copies {
             for c in card.id + 1..=card.id + winning {
-                registry.add_index(c)
+                registry.add_index(c as usize)
             }
         }
     }
