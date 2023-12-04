@@ -1,4 +1,4 @@
-use std::{fs, vec};
+use std::{collections::HashMap, fs};
 
 use crate::puzzle::AocPuzzle;
 
@@ -63,8 +63,44 @@ fn get_puzzle() -> String {
     fs::read_to_string("puzzle_4_1").expect("Should have been able to read the file")
 }
 
+struct CardsRegistry {
+    cards_indexes: HashMap<u8, u32>,
+}
+
+impl CardsRegistry {
+    fn add_index(&mut self, index: u8) {
+        self.cards_indexes
+            .entry(index)
+            .and_modify(|v| *v += 1)
+            .or_insert(1);
+    }
+    fn new() -> CardsRegistry {
+        CardsRegistry {
+            cards_indexes: HashMap::new(),
+        }
+    }
+    fn get_index(&self, index: u8) -> u32 {
+        *self.cards_indexes.get(&index).unwrap_or(&0)
+    }
+
+    fn get_count(&self) -> u32 {
+        self.cards_indexes.values().sum::<u32>()
+    }
+}
+
 fn part_2(input: &str) -> u32 {
-    unimplemented!();
+    let mut registry = CardsRegistry::new();
+    for line in input.lines() {
+        let card = Card::from_raw_line(line);
+        let num_of_copies = registry.get_index(card.id);
+        let winning = card.get_winning_tickets().iter().count() as u8;
+        for _ in 0..=num_of_copies {
+            for c in card.id + 1..=card.id + winning {
+                registry.add_index(c)
+            }
+        }
+    }
+    registry.get_count() + input.lines().count() as u32
 }
 
 fn part_1(input: &str) -> u32 {
@@ -77,7 +113,7 @@ fn part_1(input: &str) -> u32 {
 mod tests {
     use std::vec;
 
-    use crate::day4::part_1;
+    use crate::day4::{part_1, part_2};
 
     use super::Card;
 
@@ -135,6 +171,21 @@ Card 5: 87 83 26 28 32 | 88 30 70 12 93 22 82 36
 Card 6: 31 18 13 56 72 | 74 77 10 23 35 67 36 11"
             ),
             13
+        )
+    }
+
+    #[test]
+    fn test_part_2() {
+        assert_eq!(
+            part_2(
+                "Card 1: 41 48 83 86 17 | 83 86  6 31 17  9 48 53
+Card 2: 13 32 20 16 61 | 61 30 68 82 17 32 24 19
+Card 3:  1 21 53 59 44 | 69 82 63 72 16 21 14  1
+Card 4: 41 92 73 84 69 | 59 84 76 51 58  5 54 83
+Card 5: 87 83 26 28 32 | 88 30 70 12 93 22 82 36
+Card 6: 31 18 13 56 72 | 74 77 10 23 35 67 36 11"
+            ),
+            30
         )
     }
 }
