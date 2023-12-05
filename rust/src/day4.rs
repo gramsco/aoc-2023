@@ -69,11 +69,8 @@ struct CardsRegistry {
 
 impl CardsRegistry {
     fn add_index(&mut self, index: usize) {
-        if let Some(x) = self.cards_indexes.get_mut(index) {
-            *x += 1
-        } else {
-            self.cards_indexes[index] = 1
-        }
+        let x = self.cards_indexes.get_mut(index).unwrap();
+        *x += 1
     }
     fn new(len: usize) -> CardsRegistry {
         CardsRegistry {
@@ -91,6 +88,7 @@ impl CardsRegistry {
 
 fn part_2(input: &str) -> u32 {
     let mut registry = CardsRegistry::new(input.len());
+
     for line in input.lines() {
         let card = Card::from_raw_line(line);
         let num_of_copies = registry.get_index(card.id as usize);
