@@ -5,6 +5,7 @@ mod day1;
 mod day2;
 mod day3;
 mod day4;
+mod day5;
 
 mod puzzle;
 
@@ -14,6 +15,7 @@ fn run_day(day: &str, puzzle: puzzle::AocPuzzle) -> u32 {
         "day2" => day2::day_2(puzzle),
         "day3" => day3::day_3(puzzle),
         "day4" => day4::day_4(puzzle),
+        "day5" => day5::day_5(puzzle).try_into().unwrap(),
         _ => panic!("Day not implemented yet."),
     }
 }
